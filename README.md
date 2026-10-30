@@ -37,4 +37,4 @@ The recorded baseline achieved **62.5% accuracy (50/80 held-out images)**; see [
 
 An automated fresh-clone check passed on Windows with Python 3.14.0: a new environment, no local data cache, and a deleted result file reproduced the complete saved JSON record. A cached rerun also reproduced the result without network access. These checks were performed by the authoring agent and do not replace the teammate check below.
 
-**Pending:** a teammate who did not write the pipeline must make a fresh clone in a new folder, follow the setup and run commands above without verbal instructions, and confirm that `reports/baseline_metrics.json` is created or updated. Share the result or setup problem in the team's Telegram chat. Every member's repository access also still needs confirmation.
+**Completed (team-reported):** all P.E.K.K.A teammates successfully performed the fresh-clone reproduction check, followed the README instructions, and ran the baseline to create or update `reports/baseline_metrics.json`. This also confirms that all team members can access the repository.
