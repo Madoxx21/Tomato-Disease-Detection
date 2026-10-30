@@ -1,0 +1,36 @@
+{
+  "experiment": "tomato_color_histogram_logistic_regression_v1",
+  "data": "320 original-color PlantVillage tomato images; 40 per category across 8 categories",
+  "evaluation": "80 held-out images, 10 per category; 240 training images, 30 per category; disjoint leaf groups",
+  "model": "StandardScaler + logistic regression (C=1.0, max_iter=1000) on 48 RGB histogram features",
+  "metric": {
+    "name": "accuracy",
+    "value": 0.625
+  },
+  "correct": 50,
+  "train_images": 240,
+  "evaluation_images": 80,
+  "labels": [
+    "Tomato___Bacterial_spot",
+    "Tomato___Early_blight",
+    "Tomato___Late_blight",
+    "Tomato___Leaf_Mold",
+    "Tomato___Septoria_leaf_spot",
+    "Tomato___Spider_mites Two-spotted_spider_mite",
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+    "Tomato___healthy"
+  ],
+  "seed": 42,
+  "source": "https://huggingface.co/datasets/mohanty/PlantVillage",
+  "hf_revision": "9e97599868962bd0079b8db4b7f1efa9185fa1e7",
+  "image_source": "https://github.com/spMohanty/PlantVillage-Dataset",
+  "image_revision": "7f7ecc7e1eaca78107e3affe7cb5abd9427e139a",
+  "sample_sha256": "ba4ce2c6008affce08eda741962fb112b7e43cd2485995d7039d3b576d5ed625",
+  "environment": {
+    "python": "3.14.0",
+    "numpy": "2.5.4",
+    "Pillow": "13.0.0",
+    "scikit-learn": "1.9.1"
+  },
+  "limitation": "Only 80 held-out PlantVillage images (10 per category) across eight categories; Target Spot and mosaic virus are excluded because leaf mappings are unavailable. Controlled leaf photographs do not establish performance on grower phone photos, unknown conditions, or real-world disease prevalence. Color features may learn background or lighting differences instead of disease symptoms."
+}
