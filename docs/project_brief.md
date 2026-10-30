@@ -31,4 +31,4 @@ The future system also needs a photo-upload interface, guidance for taking a usa
 
 1. Inspect the source's file structure and reuse terms, then confirm access to a small sample of actual tomato images and matching labels outside the repository. Check the healthy and disease categories and whether color images can be selected without duplicate image versions.
 2. Discuss the proposed photo-to-review workflow with one tomato grower or gardening adviser. Confirm the useful next decision and whether a small sample of typical leaf photographs could be shared with permission; narrow the scope if necessary.
-3. Agree on the team communication space and add it to the README, then have all four P.E.K.K.A members open the repository and project brief using their own account before the team presents the documents.
+3. Coordinate through the team's Telegram chat group and have all four P.E.K.K.A members open the repository and project brief using their own account before the team presents the documents.
