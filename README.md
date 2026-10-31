@@ -38,3 +38,15 @@ The recorded baseline achieved **62.5% accuracy (50/80 held-out images)**; see [
 An automated fresh-clone check passed on Windows with Python 3.14.0: a new environment, no local data cache, and a deleted result file reproduced the complete saved JSON record. A cached rerun also reproduced the result without network access. These checks were performed by the authoring agent and do not replace the teammate check below.
 
 **Completed (team-reported):** all P.E.K.K.A teammates successfully performed the fresh-clone reproduction check, followed the README instructions, and ran the baseline to create or update `reports/baseline_metrics.json`. This also confirms that all team members can access the repository.
+
+## Run the Lab 04 inference demo
+
+From the repository root, install the pinned requirements as above, then run:
+
+```bash
+python src/inference_demo.py --input-ref data/inference_demo_sample/leaf.jpg
+```
+
+On Windows, use `.\.venv\Scripts\python.exe src/inference_demo.py --input-ref data/inference_demo_sample/leaf.jpg`. The first run needs internet if the pinned PlantVillage cache is absent. The script reconstructs the same fixed Lab 02 estimator from its training partition because this repository does not contain a serialized model artifact; it does not tune hyperparameters or use held-out evaluation images for fitting. It writes two JSONL lines to `reports/inference_demo.jsonl`: a real attempt on the supplied image and a controlled simulated-unavailable attempt. Each run replaces the prior demo log.
+
+**Safety/validation note:** Lab 03 did not establish a validated uncertainty cutoff. Accordingly, this demo routes every generated category suggestion to human review. It is a classroom inference path, not a validated disease diagnostic; a healthy suggestion does not rule out disease. The input check verifies file readability, RGB mode, format, and minimum dimensions only; it does not reliably detect blur, leaf presence, or unsupported diseases. Review `docs/inference_architecture.drawio` alongside the code and generated records.
