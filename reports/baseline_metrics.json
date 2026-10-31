@@ -27,7 +27,7 @@
   "image_revision": "7f7ecc7e1eaca78107e3affe7cb5abd9427e139a",
   "sample_sha256": "ba4ce2c6008affce08eda741962fb112b7e43cd2485995d7039d3b576d5ed625",
   "environment": {
-    "python": "3.14.0",
+    "python": "3.14.7",
     "numpy": "2.5.4",
     "Pillow": "13.0.0",
     "scikit-learn": "1.9.1"
