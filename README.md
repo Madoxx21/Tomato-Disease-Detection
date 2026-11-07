@@ -50,3 +50,16 @@ python src/inference_demo.py --input-ref data/inference_demo_sample/leaf.jpg
 On Windows, use `.\.venv\Scripts\python.exe src/inference_demo.py --input-ref data/inference_demo_sample/leaf.jpg`. The first run needs internet if the pinned PlantVillage cache is absent. The script reconstructs the same fixed Lab 02 estimator from its training partition because this repository does not contain a serialized model artifact; it does not tune hyperparameters or use held-out evaluation images for fitting. It writes two JSONL lines to `reports/inference_demo.jsonl`: a real attempt on the supplied image and a controlled simulated-unavailable attempt. Each run replaces the prior demo log.
 
 **Safety/validation note:** Lab 03 did not establish a validated uncertainty cutoff. Accordingly, this demo routes every generated category suggestion to human review. It is a classroom inference path, not a validated disease diagnostic; a healthy suggestion does not rule out disease. The input check verifies file readability, RGB mode, format, and minimum dimensions only; it does not reliably detect blur, leaf presence, or unsupported diseases. Review `docs/inference_architecture.drawio` alongside the code and generated records.
+
+## Run the Lab 05 input assurance demo
+
+From the repository root, install the pinned requirements and run:
+
+```powershell
+.\.venv\Scripts\python.exe src/inference_demo.py --input-ref data/inference_demo_sample/leaf.JPG
+.\.venv\Scripts\python.exe -m unittest tests/test_input_validation.py
+```
+
+The demo creates three JSONL trace records: a controlled-source pass (which calls the unchanged Lab 04 prediction function), a grower-phone-source warning (prediction is skipped and routed for review), and a declared-format error (prediction is blocked). The error case also has an unsupported source, demonstrating that error overrides warning. The warning and error cases use the sample image only as a fixture; their source/format metadata is deliberately varied for deterministic validation demonstrations.
+
+The validator checks request-level declarations. It does not prove that the referenced file exists or inspect/decode image bytes. The prediction path itself still attempts to read the file after a request passes. The preprocessing identity is defined in code and contract, not accepted from the request. The generated trace records rule observations, individual statuses/actions, combined status/action, prediction outcome, and a shared request_id.
