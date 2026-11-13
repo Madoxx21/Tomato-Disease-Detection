@@ -1,0 +1,32 @@
+{
+  "contract_version": "tomato-input-contract-v1",
+  "description": "Request-level input assurance for the controlled tomato-leaf prototype.",
+  "runtime_preprocessing_id": "tomato-rgb-resize64-bilinear-hist16x3-v1",
+  "rules": [
+    {
+      "id": "input_structure",
+      "severity": "error",
+      "description": "Required input reference, supported declared image format, and positive dimensions with minimum 32x32."
+    },
+    {
+      "id": "supported_source",
+      "severity": "warning",
+      "description": "Only controlled PlantVillage-style color images are within the current prototype evidence scope."
+    },
+    {
+      "id": "review_condition",
+      "severity": "warning",
+      "description": "Any request explicitly marked for review must be routed to a person rather than predicted automatically."
+    }
+  ],
+  "supported_formats": [
+    "JPEG",
+    "PNG"
+  ],
+  "minimum_width": 32,
+  "minimum_height": 32,
+  "approved_sources": [
+    "plantvillage_controlled"
+  ],
+  "runtime_preprocessing_note": "Defined by inference code, not accepted from the request. Resize to 64x64 with bilinear interpolation, then compute three normalized 16-bin RGB histograms."
+}
