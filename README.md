@@ -63,3 +63,138 @@ From the repository root, install the pinned requirements and run:
 The demo creates three JSONL trace records: a controlled-source pass (which calls the unchanged Lab 04 prediction function), a grower-phone-source warning (prediction is skipped and routed for review), and a declared-format error (prediction is blocked). The error case also has an unsupported source, demonstrating that error overrides warning. The warning and error cases use the sample image only as a fixture; their source/format metadata is deliberately varied for deterministic validation demonstrations.
 
 The validator checks request-level declarations. It does not prove that the referenced file exists or inspect/decode image bytes. The prediction path itself still attempts to read the file after a request passes. The preprocessing identity is defined in code and contract, not accepted from the request. The generated trace records rule observations, individual statuses/actions, combined status/action, prediction outcome, and a shared request_id.
+
+## Lab 06 — Deploy the inference API
+
+The project now includes a FastAPI service that exposes the existing
+Tomato Disease Detection baseline through HTTP endpoints.
+
+### API endpoints
+
+- `GET /health` checks whether the API is running and reports whether
+  the model has been loaded.
+- `POST /predict` accepts an RGB JPEG or PNG image and returns a
+  preliminary category suggestion.
+- Invalid files are rejected before model inference.
+- Every request is recorded in `reports/service_requests.jsonl`.
+
+The API accepts images up to 10 MB and requires a minimum image size
+of 32x32 pixels. Only JPEG and PNG formats in RGB mode are supported.
+
+### Run locally
+
+Install the dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Run the tests:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Start the API:
+
+```bash
+python -m uvicorn app:app --host 0.0.0.0 --port 8000
+```
+
+Open the following addresses:
+
+- `http://127.0.0.1:8000/health`
+- `http://127.0.0.1:8000/docs`
+
+### Test a valid image
+
+From the repository root, run:
+
+```bash
+curl -X POST http://127.0.0.1:8000/predict \
+  -F "request_id=lab06-valid-001" \
+  -F "file=@data/inference_demo_sample/leaf.JPG"
+```
+
+### Test an invalid file
+
+Create a text file:
+
+```bash
+echo "not an image" > invalid.txt
+```
+
+Send it to the API:
+
+```bash
+curl -X POST http://127.0.0.1:8000/predict \
+  -F "request_id=lab06-invalid-001" \
+  -F "file=@invalid.txt"
+```
+
+The API should return HTTP 400 and report
+`prediction_called: false`.
+
+### Deploy on Ubuntu VM
+
+Install the required packages:
+
+```bash
+sudo apt update
+sudo apt install -y git python3-venv
+```
+
+Clone the repository and enter its folder:
+
+```bash
+git clone https://github.com/Madoxx21/Tomato-Disease-Detection.git
+cd Tomato-Disease-Detection
+```
+
+Create a virtual environment and install dependencies:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements.txt
+```
+
+Run the tests:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+Start the service:
+
+```bash
+python3 -m uvicorn app:app --host 0.0.0.0 --port 8000
+```
+
+Allow inbound TCP traffic on port 8000 in the VM security
+group. Keep SSH port 22 available for administration.
+
+From another computer, open:
+
+```text
+http://VM_PUBLIC_IP:8000/health
+http://VM_PUBLIC_IP:8000/docs
+```
+
+Use the Swagger interface at `/docs` to submit one valid image
+and one invalid file.
+
+After the demonstration, stop the service with Ctrl+C.
+Review `reports/service_requests.jsonl` and copy a small,
+non-sensitive valid and rejected request example into
+`reports/service_requests.example.jsonl`.
+
+### Limitations
+
+The API uses the existing RGB-histogram Logistic Regression baseline.
+It does not use YOLO and does not represent a validated disease
+diagnostic system. Predictions are preliminary and require human
+review. The current input checks verify file format, readability,
+RGB mode, image dimensions and file size, but do not reliably
+confirm that the image contains a tomato leaf.
