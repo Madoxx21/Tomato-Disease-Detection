@@ -3,3 +3,5 @@
 __pycache__/
 *.py[cod]
 data/plantvillage_sample/
+.env
+reports/service_requests.jsonl
